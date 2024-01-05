@@ -1,0 +1,43 @@
+Public Class CustomersForm
+    Dim connectionString As String = "Data Source= ISNTANCE ;Initial Catalog=DATABASE ;Integrated Security=True"
+
+    Private Sub frmDriver_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        LoadDataIntoDataGridView()
+    End Sub
+
+    Private Sub LoadDataIntoDataGridView()
+        ' Create a DataTable to hold the data
+        Dim dataTable As New DataTable()
+
+        Try
+            Using connection As New SqlConnection(connectionString)
+                connection.Open()
+
+                ' Replace YourTableName with your actual table name
+                Dim query As String = "SELECT Name, Addr1 , City, Zipcode, Telephone , Fax , Email LastName FROM tbl"
+
+                Using command As New SqlCommand(query, connection)
+                    Using adapter As New SqlDataAdapter(command)
+                        ' Fill the DataTable with data from the database
+                        adapter.Fill(dataTable)
+                    End Using
+                End Using
+            End Using
+
+            ' Bind the DataTable to the DataGridView
+            dtgvCustomers.DataSource = dataTable
+        Catch ex As Exception
+            MessageBox.Show("Error loading data: " & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub bntbackdriver_Click(sender As Object, e As EventArgs) Handles bntbackCustomers.Click
+        Form2.Show()
+        Me.Hide()
+
+    End Sub
+
+    Private Sub dtgvCustomers_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dtgvCustomers.CellContentClick
+
+    End Sub
+End Class
